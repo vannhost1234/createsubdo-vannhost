@@ -1,0 +1,118 @@
+<?php
+// Konfigurasi Cloudflare dan domain
+$zones = [
+    'example.com' => [
+        'zone_id' => 'ZONE_ID',
+        'api_token' => 'API_TOKEN'
+    ],
+    'domainku.my.id' => [
+        'zone_id' => 'ZONE_ID2',
+        'api_key' => 'API_KEY',
+        'api_email' => 'email@example.com'
+    ]
+];
+
+$record_types = ['A'];
+$available_domains = array_keys($zones);
+$error = '';
+$success = '';
+
+// Handle Subdomain Creation
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['subdomain'])) {
+    $sub = strtolower(trim($_POST['subdomain']));
+    $domain = trim($_POST['domain']);
+    $record_type = $_POST['record_type'];
+    $content = trim($_POST['content']);
+    $proxied = isset($_POST['proxied']);
+
+    if (!preg_match('/^[a-z0-9-]+$/', $sub)) {
+        $error = "Subdomain tidak valid.";
+    } elseif (!isset($zones[$domain])) {
+        $error = "Domain tidak tersedia.";
+    } elseif ($record_type === 'A' && !filter_var($content, FILTER_VALIDATE_IP)) {
+        $error = "Alamat IP tidak valid.";
+    } else {
+        $zone = $zones[$domain];
+        $zone_id = $zone['zone_id'];
+        $headers = ['Content-Type: application/json'];
+
+        if (isset($zone['api_token'])) {
+            $headers[] = 'Authorization: Bearer ' . $zone['api_token'];
+        } elseif (isset($zone['api_key']) && isset($zone['api_email'])) {
+            $headers[] = 'X-Auth-Key: ' . $zone['api_key'];
+            $headers[] = 'X-Auth-Email: ' . $zone['api_email'];
+        } else {
+            $error = "API credentials tidak lengkap.";
+        }
+
+        if (!$error) {
+            $data = [
+                'type' => $record_type,
+                'name' => "$sub.$domain",
+                'content' => $content,
+                'ttl' => 1,
+                'proxied' => $proxied
+            ];
+
+            $ch = curl_init("https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_POST, true);
+            $response = curl_exec($ch);
+            $result = json_decode($response, true);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($http_code === 200 && $result['success']) {
+                $success = "Subdomain berhasil dibuat: {$data['name']}";
+            } else {
+                $error = "Gagal membuat subdomain: " . json_encode($result['errors']);
+            }
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pembuat Subdomain Otomatis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #111; color: white; margin: 0; padding: 0; }
+    .container { max-width: 400px; margin: 5vh auto; padding: 25px; background-color: #222; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+    input, select { width: 100%; padding: 10px; margin: 8px 0; border-radius: 5px; border: none; }
+    button { padding: 12px; width: 100%; background: #00c853; color: white; border: none; font-weight: bold; border-radius: 5px; cursor: pointer; }
+    h2 { text-align: center; }
+    .msg { padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+    .error { background: #d32f2f; }
+    .success { background: #388e3c; }
+    label { font-size: 14px; display: block; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Buat Subdomain</h2>
+    <?php if ($error): ?><div class="msg error"><?= $error ?></div><?php endif; ?>
+    <?php if ($success): ?><div class="msg success"><?= $success ?></div><?php endif; ?>
+    <form method="post">
+      <input type="text" name="subdomain" placeholder="Subdomain (tanpa .domain)" required>
+      <select name="domain">
+        <?php foreach ($available_domains as $d): ?>
+          <option value="<?= $d ?>"><?= $d ?></option>
+        <?php endforeach; ?>
+      </select>
+      <select name="record_type">
+        <?php foreach ($record_types as $r): ?>
+          <option value="<?= $r ?>"><?= $r ?></option>
+        <?php endforeach; ?>
+      </select>
+      <input type="text" name="content" placeholder="IP Address (mis. 1.2.3.4)" required>
+      <label><input type="checkbox" name="proxied" checked> Gunakan Proxy Cloudflare</label>
+      <button type="submit">Kirim</button>
+    </form>
+  </div>
+</body>
+</html>
