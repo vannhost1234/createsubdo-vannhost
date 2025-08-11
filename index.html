@@ -1,229 +1,27 @@
-<!DOCTYPE html>
-<html lang="id">
+<!doctype html>
+<html lang=id>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🌀 Login Subdomain 🌀</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      background: radial-gradient(ellipse at center, #0b0c2a 0%, #000 100%);
-      background-image: url('https://files.catbox.moe/8xmngc.jpg'); /* Ganti dengan foto kamu */
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      position: relative;
-      color: #fff;
-    }
-
-    body::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      z-index: 0;
-    }
-
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
-
-    .login-container {
-      position: relative;
-      z-index: 1;
-      background: rgba(20, 30, 48, 0.9);
-      border-radius: 16px;
-      padding: 30px 40px;
-      box-shadow: 0 8px 30px rgba(0, 255, 255, 0.4);
-      max-width: 400px;
-      width: 90%;
-      text-align: center;
-      backdrop-filter: blur(12px);
-    }
-
-    .glitch {
-      position: relative;
-      color: #00eaff;
-      font-family: 'Orbitron', sans-serif;
-      animation: glitch 1s infinite;
-      font-size: 2.4rem;
-    }
-
-    @keyframes glitch {
-      0% { text-shadow: 2px 0 red, -2px 0 blue; }
-      20% { text-shadow: -2px 0 lime, 2px 0 purple; }
-      40% { text-shadow: 2px 2px yellow, -2px -2px cyan; }
-      60% { text-shadow: 0 0 5px #00eaff, 0 0 15px #00eaff; }
-      80% { text-shadow: -1px 1px red, 1px -1px blue; }
-      100% { text-shadow: 2px 0 red, -2px 0 blue; }
-    }
-
-    label {
-      display: block;
-      margin: 15px 0 6px;
-      color: #00eaffcc;
-      font-weight: 600;
-      text-align: left;
-    }
-
-    input[type="password"] {
-      width: 100%;
-      padding: 12px 15px;
-      border-radius: 8px;
-      border: 1.5px solid #00eaff88;
-      background-color: #0a192f;
-      color: #00eaff;
-      font-size: 1rem;
-      font-family: 'Orbitron', monospace;
-      outline: none;
-      box-shadow: 0 0 10px #00eaff33;
-      transition: all 0.3s;
-    }
-
-    input[type="password"]:focus {
-      border-color: #00eaff;
-      box-shadow: 0 0 20px #00eaff88;
-    }
-
-    button.login-btn {
-      margin-top: 20px;
-      width: 100%;
-      padding: 14px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #fff;
-      background: linear-gradient(90deg, #00f0ff, #2f80ed);
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: 0.3s;
-      font-family: 'Orbitron', sans-serif;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      box-shadow: 0 0 15px #00f0ffaa;
-    }
-
-    button.login-btn:hover {
-      background: linear-gradient(90deg, #2f80ed, #00f0ff);
-      box-shadow: 0 0 30px #00f0ffcc, 0 0 50px #2f80ed99;
-      transform: scale(1.05);
-    }
-
-    .footer-text {
-      font-size: 0.8rem;
-      color: #00eaff99;
-      margin-top: 20px;
-      font-family: 'Orbitron', sans-serif;
-      text-shadow: 0 0 5px #00eaff88;
-    }
-
-    .phone-links {
-      margin-top: 30px;
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      justify-content: center;
-      z-index: 1;
-    }
-
-    .phone-link {
-      background: rgba(0, 255, 255, 0.15);
-      padding: 10px 20px;
-      border-radius: 25px;
-      text-decoration: none;
-      color: #00eaff;
-      font-weight: 600;
-      font-family: 'Orbitron', sans-serif;
-      text-shadow: 0 0 5px #00eaff88;
-      transition: 0.3s;
-      box-shadow: 0 0 15px #00eaff55;
-    }
-
-    .phone-link:hover {
-      background: #00eaff;
-      color: #002233;
-      box-shadow: 0 0 30px #00eaffcc;
-    }
-  </style>
+<meta charset=UTF-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>🌀 Login Subdomain 🌀</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Orbitron:wght@500;700&display=swap" rel=stylesheet>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Poppins,sans-serif;min-height:100vh;background-image:url('https://files.catbox.moe/8xmngc.jpg');background-size:cover;background-position:center;background-attachment:fixed;overflow:hidden;display:flex;justify-content:center;align-items:center;flex-direction:column;position:relative;color:#fff}body::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.65);z-index:0}canvas{position:absolute;top:0;left:0;z-index:0}.login-container{position:relative;z-index:1;background:rgba(20,30,48,.9);border-radius:16px;padding:30px 40px;box-shadow:0 8px 30px rgba(0,255,100,.4);max-width:400px;width:90%;text-align:center;backdrop-filter:blur(12px)}.glitch{position:relative;color:#0f6;font-family:Orbitron,sans-serif;animation:glitch 1s infinite;font-size:2.4rem}@keyframes glitch{0%{text-shadow:2px 0 #0f6,-2px 0 #0c5}20%{text-shadow:-2px 0 #0f8,2px 0 #0f3}40%{text-shadow:2px 2px #3f9,-2px -2px #6fc}60%{text-shadow:0 0 5px #0f6,0 0 15px #0f6}80%{text-shadow:-1px 1px #0f6,1px -1px #0c5}100%{text-shadow:2px 0 #0f6,-2px 0 #0c5}}label{display:block;margin:15px 0 6px;color:#00ff66cc;font-weight:600;text-align:left}input[type=password]{width:100%;padding:12px 15px;border-radius:8px;border:1.5px solid #00ff6688;background-color:#0a192f;color:#0f6;font-size:1rem;font-family:Orbitron,monospace;outline:0;box-shadow:0 0 10px #00ff6633;transition:all .3s}input[type=password]:focus{border-color:#0f6;box-shadow:0 0 20px #00ff6688}button.login-btn{margin-top:20px;width:100%;padding:14px;font-size:1.1rem;font-weight:700;color:#fff;background:linear-gradient(90deg,#0f6,#094);border:none;border-radius:30px;cursor:pointer;transition:.3s;font-family:Orbitron,sans-serif;letter-spacing:1px;text-transform:uppercase;box-shadow:0 0 15px #00ff66aa}button.login-btn:hover{background:linear-gradient(90deg,#094,#0f6);box-shadow:0 0 30px #00ff66cc,0 0 50px #00994499;transform:scale(1.05)}.footer-text{font-size:.8rem;color:#00ff6699;margin-top:20px;font-family:Orbitron,sans-serif;text-shadow:0 0 5px #00ff6688}.phone-links{margin-top:30px;display:flex;gap:15px;flex-wrap:wrap;justify-content:center;z-index:1}.phone-link{background:rgba(0,255,100,.15);padding:10px 20px;border-radius:25px;text-decoration:none;color:#0f6;font-weight:600;font-family:Orbitron,sans-serif;text-shadow:0 0 5px #00ff6688;transition:.3s;box-shadow:0 0 15px #00ff6655}.phone-link:hover{background:#0f6;color:#021;box-shadow:0 0 30px #00ff66cc}</style>
 </head>
 <body>
-  <canvas id="starCanvas"></canvas>
-
-  <div class="login-container">
-    <h1 class="glitch">LOGIN SUBDO</h1>
-    <form id="loginForm">
-      <label for="password">Password</label>
-      <input type="password" id="password" required />
-      <button type="submit" class="login-btn">Masuk</button>
-    </form>
-    <div class="footer-text">© Vann Hosting. All rights reserved.</div>
-  </div>
-
-  <div class="phone-links">
-    <a href="https://wa.me/6285607618334" class="phone-link" target="_blank">📞 NO KE 1 VANN HOST</a>
-    <a href="https://wa.me/62815536717933" class="phone-link" target="_blank">📞 NO KE 2 VANN HOST</a>
-  </div>
-
-  <script>
-    const canvas = document.getElementById('starCanvas');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    for (let i = 0; i < 100; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 1.5,
-        speed: Math.random() * 0.5 + 0.2
-      });
-    }
-
-    function drawStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#ffffff';
-      for (let star of stars) {
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fill();
-        star.y += star.speed;
-        if (star.y > canvas.height) {
-          star.y = 0;
-          star.x = Math.random() * canvas.width;
-        }
-      }
-      requestAnimationFrame(drawStars);
-    }
-
-    drawStars();
-
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const pass = document.getElementById('password').value;
-      if (pass === 'vann') {
-        window.location.href = "vann.html";
-      } else {
-        alert("Password salah!");
-      }
-    });
-  </script>
+<canvas id=starCanvas></canvas>
+<div class=login-container>
+<h1 class=glitch>LOGIN SUBDO</h1>
+<form id=loginForm>
+<label for=password>Password</label>
+<input type=password id=password required>
+<button type=submit class=login-btn>Masuk</button>
+</form>
+<div class=footer-text>© Vann Hosting. All rights reserved.</div>
+</div>
+<div class=phone-links>
+<a href=https://wa.me/6285607618334 class=phone-link target=_blank>📞 NO KE 1 VANN HOST</a>
+<a href=https://wa.me/62815536717933 class=phone-link target=_blank>📞 NO KE 2 VANN HOST</a>
+</div>
+<script>const canvas=document.getElementById("starCanvas"),ctx=canvas.getContext("2d");let stars=[];function resizeCanvas(){canvas.width=window.innerWidth,canvas.height=window.innerHeight}window.addEventListener("resize",resizeCanvas),resizeCanvas();for(let a=0;a<100;a++)stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,radius:1.5*Math.random(),speed:.5*Math.random()+.2});function drawStars(){ctx.clearRect(0,0,canvas.width,canvas.height),ctx.fillStyle="#ffffff";for(let a of stars)ctx.beginPath(),ctx.arc(a.x,a.y,a.radius,0,2*Math.PI),ctx.fill(),a.y+=a.speed,a.y>canvas.height&&(a.y=0,a.x=Math.random()*canvas.width);requestAnimationFrame(drawStars)}drawStars(),document.getElementById("loginForm").addEventListener("submit",(function(a){a.preventDefault();"vann"===document.getElementById("password").value?window.location.href="vann.html":alert("Password salah!")}))</script>
 </body>
 </html>

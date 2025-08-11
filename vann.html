@@ -1,269 +1,55 @@
-<!DOCTYPE html>
-<html lang="id">
+<!doctype html>
+<html lang=id>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset=UTF-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
 <title>Buat Subdomain Cloudflare — Vann Hosting</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-  body {
-    margin: 0; padding: 0;
-    font-family: 'Poppins', sans-serif;
-    background: url('https://files.catbox.moe/8xmngc.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: #e0e7ff;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 40px 20px;
-  }
-  main {
-    background: rgba(0, 0, 0, 0.55);
-    border-radius: 16px;
-    width: 480px;
-    padding: 30px 40px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-  h1 {
-    text-align: center;
-    font-weight: 700;
-    margin-bottom: 30px;
-    font-size: 2.3rem;
-  }
-  label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 8px;
-    margin-top: 16px;
-  }
-  select,
-  input[type=text] {
-    width: 100%;
-    border: none;
-    outline: none;
-    background: rgba(255 255 255 / 0.07);
-    padding: 12px 16px;
-    border-radius: 10px;
-    color: #ddf9ff;
-    font-size: 1rem;
-    transition: background 0.3s ease;
-  }
-  select:hover,
-  input[type=text]:hover,
-  select:focus,
-  input[type=text]:focus {
-    background: rgba(255 255 255 / 0.12);
-  }
-  button {
-    margin-top: 28px;
-    width: 100%;
-    padding: 16px;
-    border: none;
-    background: linear-gradient(135deg, #00fff7, #008080);
-    color: #001f20;
-    font-weight: 700;
-    font-size: 1.25rem;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  button:hover {
-    background: linear-gradient(135deg, #00d1ca, #004f4f);
-    color: #e0ffff;
-  }
-  #results {
-    margin-top: 30px;
-    max-height: 320px;
-    overflow-y: auto;
-    background: rgba(0 0 0 / 0.3);
-    border-radius: 14px;
-    padding: 20px;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #a0f0ff;
-    font-weight: 500;
-    white-space: pre-wrap;
-  }
-</style>
+<style>@import url(https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap);body{margin:0;font-family:Poppins,sans-serif;background:url('https://files.catbox.moe/8xmngc.jpg') no-repeat center center fixed;background-size:cover;color:#e0e7ff;display:flex;justify-content:center;align-items:flex-start;padding:40px 20px;min-height:100vh}main{background:rgba(0,0,0,.55);border-radius:16px;padding:30px 40px;width:480px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-sizing:border-box}h1{text-align:center;font-weight:700;font-size:2rem;margin-bottom:25px}label{font-weight:600;margin-bottom:8px;display:block}input[type=text],select{width:100%;padding:12px 16px;border:none;border-radius:10px;background:rgba(255,255,255,.07);color:#ddf9ff;font-size:1rem;box-sizing:border-box;margin-bottom:16px;transition:background .3s ease}input[type=text]:focus,input[type=text]:hover,select:focus,select:hover{background:rgba(255,255,255,.12);outline:0}button{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#00fff7,teal);color:#001f20;font-weight:700;font-size:1.1rem;cursor:pointer;transition:background .3s ease,color .3s ease;margin-top:10px}button:hover{background:linear-gradient(135deg,#00d1ca,#004f4f);color:#e0ffff}#results{margin-top:20px;padding:15px;background:rgba(0,0,0,.3);border-radius:14px;color:#a0f0ff;font-weight:500;font-size:.95rem;line-height:1.5;white-space:pre-wrap;max-height:300px;overflow-y:auto}</style>
 </head>
 <body>
 <main>
-  <h1>Buat Subdomain Cloudflare</h1>
-  <form id="formSubdomain" autocomplete="off">
-    <label for="domain">Pilih Domain:</label>
-    <select id="domain" required>
-      <option value="" disabled selected>-- Pilih Domain --</option>
-        <option value="vannhost.my.id">vannhost.my.id</option>
-        <option value="boss-vannhosting.biz.id">boss-vannhosting.biz.id</option>
-        <option value="fahrilkece.my.id">fahrilkece.my.id</option>
-        <option value="skyzeestore.biz.id">skyzeestore.biz.id</option>
-        <option value="skyzeehost.my.id">skyzeehost.my.id</option>
-        <option value="rexxhost.my.id">rexxhost.my.id</option>
-        <option value="website-shop.my.id">website-shop.my.id</option>
-        <option value="vipserver.web.id">vipserver.web.id</option>
-        <option value="mypanelstore.web.id">mypanelstore.web.id</option>
-        <option value="privatserver.my.id">privatserver.my.id</option>
-        <option value="serverku.biz.id">serverku.biz.id</option>
-        <option value="skyzopedia.xyz">skyzopedia.xyz</option>
-        <option value="cx0nnj.biz.id">cx0nnj.biz.id</option>
-        <option value="trbruvrl.my.id">trbruvrl.my.id</option>
-        <option value="cl1ck-web.biz.id">cl1ck-web.biz.id</option>
-        <option value="web-viralltrbru.web.id">web-viralltrbru.web.id</option>
-      </select>
-
-    <label for="ip">IP Address:</label>
-    <input type="text" id="ip" placeholder="Misal: 192.168.1.1" required />
-
-    <label for="type">Tipe DNS Record:</label>
-    <select id="type" required>
-      <option value="A" selected>A</option>
-      <option value="AAAA">AAAA</option>
-      <option value="CNAME">CNAME</option>
-      <option value="TXT">TXT</option>
-    </select>
-
-    <label for="subdomain">Subdomain:</label>
-    <input type="text" id="subdomain" placeholder="Misal: blog" required />
-    
-    <label for="proxied">Proxy (Cloudflare CDN)</label>
-    <select id="proxied" required>
-      <option value="true">Aktif (Proxied)</option>
-      <option value="false" selected>Nonaktif (DNS Only)</option>
-    </select>
-
-    <button type="submit">Buat Subdomain</button>
-  </form>
-
-  <pre id="results" aria-live="polite"></pre>
+<h1>Buat Subdomain Cloudflare</h1>
+<form id=formSubdomain autocomplete=off>
+<label for=domain>Pilih Domain:</label>
+<select id=domain required>
+<option value="" disabled selected>-- Pilih Domain --</option>
+<option value=vannhost.my.id>vannhost.my.id</option>
+<option value=boss-vannhosting.biz.id>boss-vannhosting.biz.id</option>
+<option value=fahrilkece.my.id>fahrilkece.my.id</option>
+<option value=skyzeestore.biz.id>skyzeestore.biz.id</option>
+<option value=skyzeehost.my.id>skyzeehost.my.id</option>
+<option value=rexxhost.my.id>rexxhost.my.id</option>
+<option value=website-shop.my.id>website-shop.my.id</option>
+<option value=vipserver.web.id>vipserver.web.id</option>
+<option value=mypanelstore.web.id>mypanelstore.web.id</option>
+<option value=privatserver.my.id>privatserver.my.id</option>
+<option value=serverku.biz.id>serverku.biz.id</option>
+<option value=skyzopedia.xyz>skyzopedia.xyz</option>
+<option value=cx0nnj.biz.id>cx0nnj.biz.id</option>
+<option value=trbruvrl.my.id>trbruvrl.my.id</option>
+<option value=cl1ck-web.biz.id>cl1ck-web.biz.id</option>
+<option value=web-viralltrbru.web.id>web-viralltrbru.web.id</option>
+</select>
+<label for=ip>IP Address:</label>
+<input id=ip placeholder="Misal: 192.168.1.1" required>
+<label for=type>Tipe DNS Record:</label>
+<select id=type required>
+<option value=A selected>A</option>
+<option value=AAAA>AAAA</option>
+<option value=CNAME>CNAME</option>
+<option value=TXT>TXT</option>
+</select>
+<label for=subdomain>Subdomain:</label>
+<input id=subdomain placeholder="Misal: blog" required>
+<label for=proxied>Proxy (Cloudflare CDN)</label>
+<select id=proxied required>
+<option value=true>Aktif (Proxied)</option>
+<option value=false selected>Nonaktif (DNS Only)</option>
+</select>
+<button type=submit>Buat Subdomain</button>
+</form>
+<pre id=results aria-live=polite></pre>
 </main>
-
-<script>
-  async function createSubdomain(subdomain, content, type, zoneid, token, domain, proxied) {
-    const url = `https://apikey.vannhosting.my.id/cloudflare/add-subdomain` +
-      `?subdomain=${encodeURIComponent(subdomain)}` +
-      `&content=${encodeURIComponent(content)}` +
-      `&type=${encodeURIComponent(type)}` +
-      `&zoneid=${encodeURIComponent(zoneid)}` +
-      `&token=${encodeURIComponent(token)}` +
-      `&domain=${encodeURIComponent(domain)}` +
-      `&proxied=${encodeURIComponent(proxied)}`;
-
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      return data;
-    } catch (err) {
-      return { status: false, message: err.message };
-    }
-  }
-
-  const zones = {
-      'vannhost.my.id': {
-        zone_id: 'd4ebf01ddde8839f5a024d488351d27a',
-        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
-      },
-      'boss-vannhosting.biz.id': {
-        zone_id: '9369e339aa33aefe3b32d1fd801b90e4',
-        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
-      },
-      'fahrilkece.my.id': {
-        zone_id: '04e84591cb94d8601e45dc525c982a8e',
-        token: 'B-SouV_9ImC6JtgWVwHV8w1aAM7iEsvXwS0aEY1F'
-      },
-      'skyzeestore.biz.id': {
-        zone_id: '642fa10606650630fdafbbc32e66047c',
-        token: '9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu'
-      },
-      'skyzeehost.my.id': {
-        zone_id: 'f0a92b0a15c2d78b9de35a0b3b663e3f',
-        token: '9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu'
-      },
-      'rexxhost.my.id': {
-        zone_id: '698d1b5b4a247fe9037d14a6b0b464c2',
-        token: '9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu'
-      },
-      'website-shop.my.id': {
-        zone_id: '656a11588c3baf5aa01f6dbe0be8b3d9',
-        token: '9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu'
-      },
-      'vipserver.web.id': {
-        zone_id: 'e305b750127749c9b80f41a9cf4a3a53',
-        token: 'miYhd-eMAiUmp9MniS6EsKFXnJ8D4Rofp9-GYHZw'
-      },
-      'mypanelstore.web.id': {
-        zone_id: 'c61c442d70392500611499c5af816532',
-        token: 'gqg5B6_1UQhb72wg4zS1U7AGNbofMYRXT8zFiKZC'
-      },
-      'privatserver.my.id': {
-        zone_id: '699bb9eb65046a886399c91daacb1968',
-        token: 'KBkS9zIPdG0blhqtPMUjG8z8x8xumauCRuXvY_E1'
-      },
-      'serverku.biz.id': {
-        zone_id: '4e4feaba70b41ed78295d2dcc090dd3a',
-        token: 'b4YP7XhbliFuqgiXnz3gBvrmXfzgxuKQIkXEJjM7'
-      },
-      'skyzopedia.xyz': {
-        zone_id: '4252a8c37f07d26c533683405e22cd3e',
-        token: 'OgRcjkpZ0ESvWKHJTmpO7OuNgPSw0H8Et44MIu2Y'
-      },
-      'cx0nnj.biz.id': {
-        zone_id: '0afdb07cc1a76992d494ec5756c7a0af',
-        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
-      },
-      'trbruvrl.my.id': {
-        zone_id: '9f30b9fb4439d92193742b5c4c02ee65',
-        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
-      },
-      'cl1ck-web.biz.id': {
-        zone_id: 'c8acf5465f5c10773441c188ae4d9f91',
-        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
-      },
-      'web-viralltrbru.web.id': {
-        zone_id: '271fe3d79f299e70b515cfc61a9aea54',
-        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
-      }
-    };
-
-  document.getElementById('formSubdomain').addEventListener('submit', async e => {
-    e.preventDefault();
-    const domain = document.getElementById('domain').value;
-    const content = document.getElementById('ip').value.trim();
-    const type = document.getElementById('type').value;
-    const subdomain = document.getElementById('subdomain').value.trim();
-    const proxied = document.getElementById('proxied').value;
-
-    if (!domain || !content || !type || !subdomain) {
-      alert('Isi semua form dengan benar!');
-      return;
-    }
-
-    if (!(domain in zones)) {
-      alert('Domain tidak tersedia di daftar zone.');
-      return;
-    }
-
-    const { zone_id, token } = zones[domain];
-    const results = document.getElementById('results');
-    results.textContent = 'Sedang memproses...';
-
-    const res = await createSubdomain(subdomain, content, type, zone_id, token, domain, proxied);
-
-    if (res.status === true) {
-  const fullDomain = res.subdomain || `${subdomain}.${domain}`;
-  const createdOn = res.result?.created_on ? new Date(res.result.created_on).toLocaleString('id-ID') : 'Tanggal tidak tersedia';
-  const ipAddr = res.result?.content || content;
-
-  results.textContent = 
-    `✔️ Status: Berhasil\n` +
-    `🌐 Domain: ${fullDomain}\n` +
-    `📌 IP: ${ipAddr}\n` +
-    `📅 Dibuat pada: ${createdOn}`;
-} else {
-  results.textContent = `❌ Gagal membuat subdomain:\n\n${res.message || JSON.stringify(res)}`;
-}
-  });
-</script>
+<script>async function createSubdomain(e,n,t,o,a,d,i){const c=`https://apikey.vannhosting.my.id/cloudflare/add-subdomain?subdomain=${encodeURIComponent(e)}&content=${encodeURIComponent(n)}&type=${encodeURIComponent(t)}&zoneid=${encodeURIComponent(o)}&token=${encodeURIComponent(a)}&domain=${encodeURIComponent(d)}&proxied=${encodeURIComponent(i)}`;try{const e=await fetch(c);return await e.json()}catch(e){return{status:!1,message:e.message}}}const zones={"vannhost.my.id":{zone_id:"d4ebf01ddde8839f5a024d488351d27a",token:"HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0"},"boss-vannhosting.biz.id":{zone_id:"9369e339aa33aefe3b32d1fd801b90e4",token:"HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0"},"fahrilkece.my.id":{zone_id:"04e84591cb94d8601e45dc525c982a8e",token:"B-SouV_9ImC6JtgWVwHV8w1aAM7iEsvXwS0aEY1F"},"skyzeestore.biz.id":{zone_id:"642fa10606650630fdafbbc32e66047c",token:"9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu"},"skyzeehost.my.id":{zone_id:"f0a92b0a15c2d78b9de35a0b3b663e3f",token:"9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu"},"rexxhost.my.id":{zone_id:"698d1b5b4a247fe9037d14a6b0b464c2",token:"9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu"},"website-shop.my.id":{zone_id:"656a11588c3baf5aa01f6dbe0be8b3d9",token:"9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu"},"vipserver.web.id":{zone_id:"e305b750127749c9b80f41a9cf4a3a53",token:"miYhd-eMAiUmp9MniS6EsKFXnJ8D4Rofp9-GYHZw"},"mypanelstore.web.id":{zone_id:"c61c442d70392500611499c5af816532",token:"gqg5B6_1UQhb72wg4zS1U7AGNbofMYRXT8zFiKZC"},"privatserver.my.id":{zone_id:"699bb9eb65046a886399c91daacb1968",token:"KBkS9zIPdG0blhqtPMUjG8z8x8xumauCRuXvY_E1"},"serverku.biz.id":{zone_id:"4e4feaba70b41ed78295d2dcc090dd3a",token:"b4YP7XhbliFuqgiXnz3gBvrmXfzgxuKQIkXEJjM7"},"skyzopedia.xyz":{zone_id:"4252a8c37f07d26c533683405e22cd3e",token:"OgRcjkpZ0ESvWKHJTmpO7OuNgPSw0H8Et44MIu2Y"},"cx0nnj.biz.id":{zone_id:"0afdb07cc1a76992d494ec5756c7a0af",token:"HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0"},"trbruvrl.my.id":{zone_id:"9f30b9fb4439d92193742b5c4c02ee65",token:"HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0"},"cl1ck-web.biz.id":{zone_id:"c8acf5465f5c10773441c188ae4d9f91",token:"HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0"},"web-viralltrbru.web.id":{zone_id:"271fe3d79f299e70b515cfc61a9aea54",token:"HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0"}};document.getElementById("formSubdomain").addEventListener("submit",(async e=>{e.preventDefault();const n=document.getElementById("domain").value,t=document.getElementById("ip").value.trim(),o=document.getElementById("type").value,a=document.getElementById("subdomain").value.trim(),d=document.getElementById("proxied").value;if(!(n&&t&&o&&a))return void alert("Isi semua form dengan benar!");if(!(n in zones))return void alert("Domain tidak tersedia di daftar zone.");const{zone_id:i,token:c}=zones[n],m=document.getElementById("results");m.textContent="Sedang memproses...";const s=await createSubdomain(a,t,o,i,c,n,d);if(!0===s.status){const e=s.subdomain||`${a}.${n}`,o=s.result?.created_on?new Date(s.result.created_on).toLocaleString("id-ID"):"Tanggal tidak tersedia",d=s.result?.content||t;m.textContent=`✔️ Status: Berhasil\n🌐 Domain: ${e}\n📌 IP: ${d}\n📅 Dibuat pada: ${o}`}else m.textContent=`❌ Gagal membuat subdomain:\n\n${s.message||JSON.stringify(s)}`}))</script>
 </body>
 </html>
