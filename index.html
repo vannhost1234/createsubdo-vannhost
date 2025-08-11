@@ -6,7 +6,6 @@
 <title>Buat Subdomain Cloudflare — Vann Hosting</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-
   body {
     margin: 0; padding: 0;
     font-family: 'Poppins', sans-serif;
@@ -147,7 +146,7 @@
       <option value="web-viralltrbru.web.id">web-viralltrbru.web.id</option>
     </select>
 
-    <label for="ip">IP</label>
+    <label for="ip">Ip</label>
     <input type="text" id="ip" placeholder="Misal: 192.168.1.1" required />
 
     <label for="type">Dns Record</label>
@@ -286,39 +285,37 @@
       subdomains = subdomains.slice(0, 14);
     }
 
-    const { zone_id, token } = zones[domain];
-    if (!zone_id || !token) {
+    const zone = zones[domain];
+    if (!zone) {
       alert('Data zone atau token tidak ditemukan untuk domain ini!');
       return;
     }
 
+    const { zone_id, token } = zone;
     const resultsContainer = document.getElementById('results');
     resultsContainer.innerHTML = '<p style="text-align:center;color:#00fff7;">Sedang memproses...</p>';
 
     let resultsHTML = '';
 
     for (const sub of subdomains) {
+      resultsHTML += `<div class="result-item"><div class="result-subdomain">${sub}.${domain}</div><div class="result-msg">Sedang membuat...</div></div>`;
+      resultsContainer.innerHTML = resultsHTML;
+
       const res = await createSubdomain(sub, content, type, zone_id, token, domain);
 
       if (res.success) {
-        resultsHTML += `
-          <div class="result-item success">
-            <div class="result-subdomain">${sub}.${domain}</div>
-            <div class="result-msg">✔️ Berhasil dibuat</div>
-            <pre style="font-size:0.8rem;color:#004d40;">${JSON.stringify(res, null, 2)}</pre>
-          </div>
-        `;
+        resultsHTML = resultsHTML.replace(
+          `<div class="result-subdomain">${sub}.${domain}</div><div class="result-msg">Sedang membuat...</div>`,
+          `<div class="result-subdomain">${sub}.${domain}</div><div class="result-msg" style="color: #007c4d;">✔️ Berhasil dibuat</div><pre style="font-size:0.8rem;color:#004d40;">${JSON.stringify(res, null, 2)}</pre>`
+        );
       } else {
-        resultsHTML += `
-          <div class="result-item error">
-            <div class="result-subdomain">${sub}.${domain}</div>
-            <div class="result-msg">❌ Gagal: ${res.message || JSON.stringify(res)}</div>
-          </div>
-        `;
+        resultsHTML = resultsHTML.replace(
+          `<div class="result-subdomain">${sub}.${domain}</div><div class="result-msg">Sedang membuat...</div>`,
+          `<div class="result-subdomain">${sub}.${domain}</div><div class="result-msg" style="color: #a00000;">❌ Gagal: ${res.message || JSON.stringify(res)}</div>`
+        );
       }
+      resultsContainer.innerHTML = resultsHTML;
     }
-
-    resultsContainer.innerHTML = resultsHTML;
   });
 </script>
 </body>
