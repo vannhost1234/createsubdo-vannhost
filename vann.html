@@ -9,7 +9,8 @@
   body {
     margin: 0; padding: 0;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    background: url('https://files.catbox.moe/8xmngc.jpg') no-repeat center center fixed;
+    background-size: cover;
     color: #e0e7ff;
     display: flex;
     justify-content: center;
@@ -18,7 +19,7 @@
     padding: 40px 20px;
   }
   main {
-    background: rgba(255 255 255 / 0.1);
+    background: rgba(0, 0, 0, 0.55);
     border-radius: 16px;
     width: 480px;
     padding: 30px 40px;
@@ -38,8 +39,7 @@
     margin-top: 16px;
   }
   select,
-  input[type=text],
-  textarea {
+  input[type=text] {
     width: 100%;
     border: none;
     outline: none;
@@ -52,16 +52,9 @@
   }
   select:hover,
   input[type=text]:hover,
-  textarea:hover,
   select:focus,
-  input[type=text]:focus,
-  textarea:focus {
+  input[type=text]:focus {
     background: rgba(255 255 255 / 0.12);
-  }
-  textarea {
-    min-height: 100px;
-    resize: vertical;
-    font-family: 'Poppins', sans-serif;
   }
   button {
     margin-top: 28px;
@@ -129,8 +122,6 @@
       <option value="AAAA">AAAA</option>
       <option value="CNAME">CNAME</option>
       <option value="TXT">TXT</option>
-      <option value="MX">MX</option>
-      <option value="SRV">SRV</option>
     </select>
 
     <label for="subdomain">Subdomain:</label>
@@ -138,8 +129,8 @@
     
     <label for="proxied">Proxy (Cloudflare CDN)</label>
     <select id="proxied" required>
-    <option value="true">Aktif (Proxied)</option>
-    <option value="false" selected>Nonaktif (DNS Only)</option>
+      <option value="true">Aktif (Proxied)</option>
+      <option value="false" selected>Nonaktif (DNS Only)</option>
     </select>
 
     <button type="submit">Buat Subdomain</button>
@@ -149,9 +140,16 @@
 </main>
 
 <script>
-  async function createSubdomain(subdomain, content, type, zoneid, token, domain) {
-    const proxied = document.getElementById('proxied').value === 'true';
-    const url = `https://apikey.vannhosting.my.id/cloudflare/add-subdomain?subdomain=    ${encodeURIComponent(subdomain)}&content=${encodeURIComponent(content)}&type=    ${encodeURIComponent(type)}&zoneid=${encodeURIComponent(zoneid)}&token=${encodeURIComponent(token)}&domain=${encodeURIComponent(domain)}&proxied=${proxied}`;
+  async function createSubdomain(subdomain, content, type, zoneid, token, domain, proxied) {
+    const url = `https://apikey.vannhosting.my.id/cloudflare/add-subdomain` +
+      `?subdomain=${encodeURIComponent(subdomain)}` +
+      `&content=${encodeURIComponent(content)}` +
+      `&type=${encodeURIComponent(type)}` +
+      `&zoneid=${encodeURIComponent(zoneid)}` +
+      `&token=${encodeURIComponent(token)}` +
+      `&domain=${encodeURIComponent(domain)}` +
+      `&proxied=${encodeURIComponent(proxied)}`;
+
     try {
       const res = await fetch(url);
       const data = await res.json();
@@ -230,11 +228,11 @@
 
   document.getElementById('formSubdomain').addEventListener('submit', async e => {
     e.preventDefault();
-
     const domain = document.getElementById('domain').value;
     const content = document.getElementById('ip').value.trim();
     const type = document.getElementById('type').value;
     const subdomain = document.getElementById('subdomain').value.trim();
+    const proxied = document.getElementById('proxied').value;
 
     if (!domain || !content || !type || !subdomain) {
       alert('Isi semua form dengan benar!');
@@ -250,19 +248,12 @@
     const results = document.getElementById('results');
     results.textContent = 'Sedang memproses...';
 
-    const res = await createSubdomain(subdomain, content, type, zone_id, token, domain);
+    const res = await createSubdomain(subdomain, content, type, zone_id, token, domain, proxied);
 
     if (res.status === true) {
-      // Ambil data yang dibutuhkan dari response
       const fullDomain = res.subdomain || `${subdomain}.${domain}`;
       const createdOn = res.result?.created_on ? new Date(res.result.created_on).toLocaleString('id-ID') : 'Tanggal tidak tersedia';
-      const status = res.status ? 'Berhasil' : 'Gagal';
-
-      results.textContent = 
-        `✔️ Status: ${status}\n` +
-        `🌐 Domain: ${fullDomain}\n` +
-        `📅 Dibuat pada: ${createdOn}\n\n` +
-        `Detail Response:\n${JSON.stringify(res, null, 2)}`;
+      results.textContent = `✔️ Status: Berhasil\n🌐 Domain: ${fullDomain}\n📅 Dibuat pada: ${createdOn}\n\nDetail Response:\n${JSON.stringify(res, null, 2)}`;
     } else {
       results.textContent = `❌ Gagal membuat subdomain:\n\n${res.message || JSON.stringify(res)}`;
     }
