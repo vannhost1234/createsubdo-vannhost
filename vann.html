@@ -251,12 +251,18 @@
     const res = await createSubdomain(subdomain, content, type, zone_id, token, domain, proxied);
 
     if (res.status === true) {
-      const fullDomain = res.subdomain || `${subdomain}.${domain}`;
-      const createdOn = res.result?.created_on ? new Date(res.result.created_on).toLocaleString('id-ID') : 'Tanggal tidak tersedia';
-      results.textContent = `✔️ Status: Berhasil\n🌐 Domain: ${fullDomain}\n📅 Dibuat pada: ${createdOn}\n\nDetail Response:\n${JSON.stringify(res, null, 2)}`;
-    } else {
-      results.textContent = `❌ Gagal membuat subdomain:\n\n${res.message || JSON.stringify(res)}`;
-    }
+  const fullDomain = res.subdomain || `${subdomain}.${domain}`;
+  const createdOn = res.result?.created_on ? new Date(res.result.created_on).toLocaleString('id-ID') : 'Tanggal tidak tersedia';
+  const ipAddr = res.result?.content || content;
+
+  results.textContent = 
+    `✔️ Status: Berhasil\n` +
+    `🌐 Domain: ${fullDomain}\n` +
+    `📌 IP: ${ipAddr}\n` +
+    `📅 Dibuat pada: ${createdOn}`;
+} else {
+  results.textContent = `❌ Gagal membuat subdomain:\n\n${res.message || JSON.stringify(res)}`;
+}
   });
 </script>
 </body>
