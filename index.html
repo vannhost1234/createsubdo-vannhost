@@ -11,7 +11,7 @@
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       background: radial-gradient(ellipse at center, #0b0c2a 0%, #000 100%);
-      background-image: url('https://files.catbox.moe/8xmngc.jpg'); /* Ganti dengan foto kamu */
+      background-image: url('https://files.catbox.moe/8xmngc.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -24,18 +24,12 @@
       color: #fff;
     }
 
+    /* Overlay gelap agar foto tidak terlalu terang */
     body::after {
       content: "";
       position: absolute;
       inset: 0;
       background: rgba(0, 0, 0, 0.65);
-      z-index: 0;
-    }
-
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
       z-index: 0;
     }
 
@@ -58,6 +52,7 @@
       font-family: 'Orbitron', sans-serif;
       animation: glitch 1s infinite;
       font-size: 2.4rem;
+      margin-bottom: 20px;
     }
 
     @keyframes glitch {
@@ -127,98 +122,25 @@
       font-family: 'Orbitron', sans-serif;
       text-shadow: 0 0 5px #00eaff88;
     }
-
-    .phone-links {
-      margin-top: 30px;
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      justify-content: center;
-      z-index: 1;
-    }
-
-    .phone-link {
-      background: rgba(0, 255, 255, 0.15);
-      padding: 10px 20px;
-      border-radius: 25px;
-      text-decoration: none;
-      color: #00eaff;
-      font-weight: 600;
-      font-family: 'Orbitron', sans-serif;
-      text-shadow: 0 0 5px #00eaff88;
-      transition: 0.3s;
-      box-shadow: 0 0 15px #00eaff55;
-    }
-
-    .phone-link:hover {
-      background: #00eaff;
-      color: #002233;
-      box-shadow: 0 0 30px #00eaffcc;
-    }
   </style>
 </head>
 <body>
-  <canvas id="starCanvas"></canvas>
-
-  <div class="login-container">
-    <h1 class="glitch">LOGIN SUBDO</h1>
-    <form id="loginForm">
+  <div class="login-container" role="main" aria-label="Form Login Subdomain">
+    <h1 class="glitch" aria-live="polite">LOGIN SUBDO</h1>
+    <form id="loginForm" autocomplete="off" aria-describedby="loginHelp">
       <label for="password">Password</label>
-      <input type="password" id="password" required />
+      <input type="password" id="password" name="password" aria-required="true" />
       <button type="submit" class="login-btn">Masuk</button>
     </form>
-    <div class="footer-text">© Vann Hosting. All rights reserved.</div>
-  </div>
-
-  <div class="phone-links">
-    <a href="https://wa.me/6285607618334" class="phone-link" target="_blank">📞 NO KE 1 VANN HOST</a>
-    <a href="https://wa.me/62815536717933" class="phone-link" target="_blank">📞 NO KE 2 VANN HOST</a>
+    <div class="footer-text" id="loginHelp">© Vann Hosting. All rights reserved.</div>
   </div>
 
   <script>
-    const canvas = document.getElementById('starCanvas');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    for (let i = 0; i < 100; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 1.5,
-        speed: Math.random() * 0.5 + 0.2
-      });
-    }
-
-    function drawStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#ffffff';
-      for (let star of stars) {
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fill();
-        star.y += star.speed;
-        if (star.y > canvas.height) {
-          star.y = 0;
-          star.x = Math.random() * canvas.width;
-        }
-      }
-      requestAnimationFrame(drawStars);
-    }
-
-    drawStars();
-
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const pass = document.getElementById('password').value;
+      const pass = document.getElementById('password').value.trim();
       if (pass === 'vann') {
+        // Redirect ke halaman subdomain, contoh 'vann.html'
         window.location.href = "vann.html";
       } else {
         alert("Password salah!");
