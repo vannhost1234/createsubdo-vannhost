@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Buat Subdomain Cloudflare — Vann Hosting</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+    /* Reset dan dasar */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Background image fullscreen */
+    body {
+      background: url('https://files.catbox.moe/8xmngc.jpg') no-repeat center center fixed;
+      background-size: cover;
+      transition: filter 0.3s ease;
+      filter: brightness(0.7);
+    }
+
+    /* Mode terang, kurangi filter gelap */
+    body.light-mode {
+      filter: brightness(1);
+    }
+
+    /* Container utama */
+    main {
+      background: rgba(0,0,0,0.6);
+      border-radius: 16px;
+      width: 480px;
+      max-width: 95vw;
+      padding: 30px 40px;
+      margin: 40px auto;
+      color: #e0e7ff;
+      box-shadow: 0 0 25px rgba(0,0,0,0.7);
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      margin-bottom: 30px;
+      font-size: 2.3rem;
+      color: #00fff7;
+      text-shadow: 0 0 10px #00fff7aa;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      margin-top: 16px;
+      color: #a0e9ff;
+      text-shadow: 0 0 4px #008080aa;
+    }
+
+    select,
+    input[type="text"],
+    textarea {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: #e0f7ff;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+      box-shadow: inset 0 0 6px #00fff7aa;
+    }
+
+    select:hover,
+    input[type="text"]:hover,
+    textarea:hover,
+    select:focus,
+    input[type="text"]:focus,
+    textarea:focus {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 0 10px #00fff7dd;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    button {
+      margin-top: 28px;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      background: linear-gradient(135deg, #00fff7, #008080);
+      color: #001f20;
+      font-weight: 700;
+      font-size: 1.25rem;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease;
+      box-shadow: 0 0 15px #00fff7aa;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #00d1ca, #004f4f);
+      color: #e0ffff;
+      box-shadow: 0 0 20px #00fff7ff;
+    }
+
+    #results {
+      margin-top: 30px;
+      max-height: 320px;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 14px;
+      padding: 20px;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #a0f0ff;
+      font-weight: 500;
+      box-shadow: 0 0 10px #00fff7aa;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .result-item {
+      margin-bottom: 12px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .result-item.success {
+      background: #00ff9c33;
+      color: #007c4d;
+      font-weight: 700;
+    }
+
+    .result-item.error {
+      background: #ff424233;
+      color: #a00000;
+      font-weight: 700;
+    }
+
+    .result-subdomain {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+      color: #00fff7;
+      text-shadow: 0 0 6px #00fff7bb;
+    }
+
+    .result-msg {
+      font-style: italic;
+      max-width: 100%;
+    }
+
+    /* Tombol toggle mode */
+    #toggleMode {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      padding: 10px 16px;
+      background: #00fff7cc;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #004f4f;
+      box-shadow: 0 0 8px #00fff7cc;
+      transition: background 0.3s ease;
+      z-index: 1000;
+    }
+
+    #toggleMode:hover {
+      background: #00d1caee;
+      color: #002a2a;
+      box-shadow: 0 0 12px #00fff7ff;
+    }
+  </style>
+</head>
+<body>
+  <button id="toggleMode" aria-label="Toggle mode gelap/terang">🌙 Mode Terang</button>
+
+  <main>
+    <h1>Buat Subdomain Cloudflare</h1>
+    <form id="formSubdomain" autocomplete="off">
+      <label for="domain">Pilih Domain</label>
+      <select id="domain" required>
+        <option value="" disabled selected>-- Pilih Domain --</option>
+        <option value="vannhost.my.id">vannhost.my.id</option>
+        <option value="boss-vannhosting.biz.id">boss-vannhosting.biz.id</option>
+        <option value="fahrilkece.my.id">fahrilkece.my.id</option>
+        <option value="skyzeestore.biz.id">skyzeestore.biz.id</option>
+        <option value="skyzeehost.my.id">skyzeehost.my.id</option>
+        <option value="rexxhost.my.id">rexxhost.my.id</option>
+        <option value="website-shop.my.id">website-shop.my.id</option>
+        <option value="vipserver.web.id">vipserver.web.id</option>
+        <option value="mypanelstore.web.id">mypanelstore.web.id</option>
+        <option value="privatserver.my.id">privatserver.my.id</option>
+        <option value="serverku.biz.id">serverku.biz.id</option>
+        <option value="skyzopedia.xyz">skyzopedia.xyz</option>
+        <option value="cx0nnj.biz.id">cx0nnj.biz.id</option>
+        <option value="trbruvrl.my.id">trbruvrl.my.id</option>
+        <option value="cl1ck-web.biz.id">cl1ck-web.biz.id</option>
+        <option value="web-viralltrbru.web.id">web-viralltrbru.web.id</option>
+      </select>
+
+      <label for="ip">IP</label>
+      <input type="text" id="ip" placeholder="Misal: 192.168.1.1" required />
+
+      <label for="type">DNS Record</label>
+      <select id="type" required>
+        <option value="A" selected>A</option>
+        <option value="AAAA">AAAA</option>
+        <option value="CNAME">CNAME</option>
+        <option value="TXT">TXT</option>
+        <option value="MX">MX</option>
+        <option value="SRV">SRV</option>
+      </select>
+
+      <label for="subdomains">Subdomain</label>
+      <textarea
+        id="subdomains"
+        placeholder="Contoh: puki"
+        required
+        maxlength="300"
+      ></textarea>
+
+      <button type="submit">Buat Subdomain</button>
+    </form>
+
+    <div id="results" aria-live="polite"></div>
+  </main>
+
+  <script>
+    const zones = {
+      'vannhost.my.id': {
+        zone_id: 'd4ebf01ddde8839f5a024d488351d27a',
+        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
+      },
+      'boss-vannhosting.biz.id': {
+        zone_id: '9369e339aa33aefe3b32d1fd801b90e4',
+        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
+      },
+      'fahrilkece.my.id': {
+        zone_id: '04e84591cb94d8601e45dc525c982a8e',
+        token: 'B-SouV_9ImC6JtgWVwHV8w1aAM7iEsvXwS0aEY1F'
+      },
+      'skyzeestore.biz.id': {
+        zone_id: '642fa10606650630fdafbbc32e66047c',
+        token: '9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu'
+      },
+      'skyzeehost.my.id': {
+        zone_id: 'f0a92b0a15c2d78b9de35a0b3b663e3f',
+        token: '9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu'
+      },
+      'rexxhost.my.id': {
+        zone_id: '698d1b5b4a247fe9037d14a6b0b464c2',
+        token: '9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu'
+      },
+      'website-shop.my.id': {
+        zone_id: '656a11588c3baf5aa01f6dbe0be8b3d9',
+        token: '9spO9pGi3e9Cp3DurL7kSc8eZMuagiOkig6YvEPu'
+      },
+      'vipserver.web.id': {
+        zone_id: 'e305b750127749c9b80f41a9cf4a3a53',
+        token: 'miYhd-eMAiUmp9MniS6EsKFXnJ8D4Rofp9-GYHZw'
+      },
+      'mypanelstore.web.id': {
+        zone_id: 'c61c442d70392500611499c5af816532',
+        token: 'gqg5B6_1UQhb72wg4zS1U7AGNbofMYRXT8zFiKZC'
+      },
+      'privatserver.my.id': {
+        zone_id: '699bb9eb65046a886399c91daacb1968',
+        token: 'KBkS9zIPdG0blhqtPMUjG8z8x8xumauCRuXvY_E1'
+      },
+      'serverku.biz.id': {
+        zone_id: '4e4feaba70b41ed78295d2dcc090dd3a',
+        token: 'b4YP7XhbliFuqgiXnz3gBvrmXfzgxuKQIkXEJjM7'
+      },
+      'skyzopedia.xyz': {
+        zone_id: '4252a8c37f07d26c533683405e22cd3e',
+        token: 'OgRcjkpZ0ESvWKHJTmpO7OuNgPSw0H8Et44MIu2Y'
+      },
+      'cx0nnj.biz.id': {
+        zone_id: '0afdb07cc1a76992d494ec5756c7a0af',
+        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
+      },
+      'trbruvrl.my.id': {
+        zone_id: '9f30b9fb4439d92193742b5c4c02ee65',
+        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
+      },
+      'cl1ck-web.biz.id': {
+        zone_id: 'c8acf5465f5c10773441c188ae4d9f91',
+        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
+      },
+      'web-viralltrbru.web.id': {
+        zone_id: '271fe3d79f299e70b515cfc61a9aea54',
+        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
+      }
+    };
+
+    async function createSubdomain(subdomain, content, type, zoneid, token, domain) {
+      const url = `https://apikey.vannhosting.my.id/cloudflare/add-subdomain?subdomain=${encodeURIComponent(subdomain)}&content=${encodeURIComponent(content)}&type=${encodeURIComponent(type)}&zoneid=${encodeURIComponent(zoneid)}&token=${encodeURIComponent(token)}&domain=${encodeURIComponent(domain)}`;
+      try {
+        const res = await fetch(url);
+        const text = await res.text();
+        try {
+          const data = JSON.parse(text);
+          return data;
+        } catch {
+          return { success: false, message: 'Response bukan JSON: ' + text };
+        }
+      } catch (err) {
+        return { success: false, message: err.message };
+      }
+    }
+
+    document.getElementById('formSubdomain').addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const domain = document.getElementById('domain').value;
+      const content = document.getElementById('ip').value.trim();
+      const type = document.getElementById('type').value;
+      const subdomainsRaw = document.getElementById('subdomains').value.trim();
+
+      if (!domain) {
+        alert('Pilih domain terlebih dahulu!');
+        return;
+      }
+      if (!content) {
+        alert('Isi IP / Content record!');
+        return;
+      }
+      if (!subdomainsRaw) {
+        alert('Masukkan minimal satu subdomain!');
+        return;
+      }
+
+      let subdomains = subdomainsRaw.split(/[\n,]+/).map(s => s.trim()).filter(s => s !== '');
+
+      if (subdomains.length > 14) {
+        alert('Maksimal 14 subdomain!');
+        subdomains = subdomains.slice(0, 14);
+      }
+
+      const zone = zones[domain];
+      if (!zone) {
+        alert('Data zona atau token tidak ditemukan untuk domain ini!');
+        return;
+      }
+
+      const { zone_id, token } = zone;
+      const resultsContainer = document.getElementById('results');
+      resultsContainer.innerHTML = '<p style="text-align:center;color:#00fff7;">Sedang memproses...</p>';
+
+      let resultsHTML = '';
+
+      for (const sub of subdomains) {
+        resultsHTML += `<div class="result-item"><div class="result-subdomain">${sub}.${domain}</div><div class="result-msg">Sedang membuat...</div></div>`;
+        resultsContainer.innerHTML = resultsHTML;
+
+        const res = await createSubdomain(sub, content, type, zone_id, token, domain);
+
+        if (res.success || res.status) {
+          resultsHTML = resultsHTML.replace(
+            `<div class="result-subdomain">${sub}.${domain}</div><div class="result-msg">Sedang membuat...</div>`,
+            `<div class="result-item success"><div class="result-subdomain">${sub}.${domain}</div><div class="result-msg">✔️ Berhasil dibuat</div><pre>${JSON.stringify(res, null, 2)}</pre></div>`
+          );
+        } else {
+          resultsHTML = resultsHTML.replace(
+            `<div class="result-subdomain">${sub}.${domain}</div><div class="result-msg">Sedang membuat...</div>`,
+            `<div class="result-item error"><div class="result-subdomain">${sub}.${domain}</div><div class="result-msg">❌ Gagal: ${res.message || JSON.stringify(res)}</div></div>`
+          );
+        }
+        resultsContainer.innerHTML = resultsHTML;
+      }
+    });
+
+    // Toggle gelap/terang
+    const toggleBtn = document.getElementById('toggleMode');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      if(document.body.classList.contains('light-mode')) {
+        toggleBtn.textContent = '🌙 Mode Gelap';
+      } else {
+        toggleBtn.textContent = '🌞 Mode Terang';
+      }
+    });
+  </script>
+</body>
+</html>
