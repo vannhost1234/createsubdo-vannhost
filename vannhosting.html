@@ -206,6 +206,14 @@
         token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
       }
     };
+    
+  const domainSelect = document.getElementById('domain');
+  for (const domain of Object.keys(zones)) {
+  const opt = document.createElement('option');
+  opt.value = domain;
+  opt.textContent = domain;
+  domainSelect.appendChild(opt);
+  }
 
   document.getElementById('formSubdomain').addEventListener('submit', async e => {
     e.preventDefault();
