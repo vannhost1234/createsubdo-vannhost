@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard Admin — Kelola Domain</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: url('https://files.catbox.moe/8xmngc.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #e0e7ff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+  main {
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 16px;
+    padding: 30px 40px;
+    width: 480px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-sizing: border-box;
+  }
+  h1 { text-align: center; font-weight: 700; font-size: 2rem; margin-bottom: 25px; }
+  label { font-weight: 600; margin-bottom: 8px; display: block; }
+  input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #ddf9ff;
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #00fff7, #008080);
+    color: #001f20;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  button:hover { background: linear-gradient(135deg, #00d1ca, #004f4f); color: #e0ffff; }
+  #domainList {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 14px;
+    font-size: 0.9rem;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Dashboard Admin</h1>
+  <form id="formDomain">
+    <label for="domainName">Nama Domain</label>
+    <input type="text" id="domainName" placeholder="contoh: example.com" required>
+
+    <label for="zoneId">Zone ID</label>
+    <input type="text" id="zoneId" placeholder="masukkan Zone ID Cloudflare" required>
+
+    <label for="apiToken">API Token</label>
+    <input type="text" id="apiToken" placeholder="masukkan API Token Cloudflare" required>
+
+    <button type="submit">Tambah Domain</button>
+  </form>
+
+  <div id="domainList"></div>
+</main>
+
+<script>
+  let zones = JSON.parse(localStorage.getItem('cloudflare_zones')) || {};
+  const domainList = document.getElementById('domainList');
+
+  function renderDomains() {
+    domainList.innerHTML = '';
+    if (Object.keys(zones).length === 0) {
+      domainList.innerHTML = '<p>Belum ada domain ditambahkan.</p>';
+      return;
+    }
+    for (const [domain, data] of Object.entries(zones)) {
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <strong>${domain}</strong><br>
+        Zone ID: ${data.zone_id}<br>
+        Token: ${data.token}<hr>`;
+      domainList.appendChild(div);
+    }
+  }
+
+  document.getElementById('formDomain').addEventListener('submit', e => {
+    e.preventDefault();
+    const domain = document.getElementById('domainName').value.trim();
+    const zoneId = document.getElementById('zoneId').value.trim();
+    const token = document.getElementById('apiToken').value.trim();
+
+    if (!domain || !zoneId || !token) {
+      alert('Harap isi semua field!');
+      return;
+    }
+
+    zones[domain] = { zone_id: zoneId, token: token };
+    localStorage.setItem('cloudflare_zones', JSON.stringify(zones));
+    renderDomains();
+    alert('Domain berhasil ditambahkan!');
+    e.target.reset();
+  });
+
+  renderDomains();
+</script>
+</body>
+</html>
