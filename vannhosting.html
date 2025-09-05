@@ -246,6 +246,63 @@
 
   results.textContent = 
     `✔️ Status: Berhasil\n` +
+    `🌐 Subdomain: ${fullDomain}\n` +
+    `📌 IP: ${ipAddr}\n` +
+    `📅 Dibuat pada: ${createdOn}`;
+} else {
+  results.textContent = `❌ Gagal membuat subdomain:\n\n${res.message || JSON.stringify(res)}`;
+}
+  });
+</script>
+</body>
+</html>        zone_id: 'c8acf5465f5c10773441c188ae4d9f91',
+        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
+      },
+      'web-viralltrbru.web.id': {
+        zone_id: '271fe3d79f299e70b515cfc61a9aea54',
+        token: 'HmZpTRjH_-Oohcc74UZxzDqHthmCW8j7waJ7xRv0'
+      }
+    };
+    
+  const domainSelect = document.getElementById('domain');
+  for (const domain of Object.keys(zones)) {
+  const opt = document.createElement('option');
+  opt.value = domain;
+  opt.textContent = domain;
+  domainSelect.appendChild(opt);
+  }
+
+  document.getElementById('formSubdomain').addEventListener('submit', async e => {
+    e.preventDefault();
+    const domain = document.getElementById('domain').value;
+    const content = document.getElementById('ip').value.trim();
+    const type = document.getElementById('type').value;
+    const subdomain = document.getElementById('subdomain').value.trim();
+    const proxied = document.getElementById('proxied').value;
+
+    if (!domain || !content || !type || !subdomain) {
+      alert('Isi semua form dengan benar!');
+      return;
+    }
+
+    if (!(domain in zones)) {
+      alert('Domain tidak tersedia di daftar zone.');
+      return;
+    }
+
+    const { zone_id, token } = zones[domain];
+    const results = document.getElementById('results');
+    results.textContent = 'Sedang memproses...';
+
+    const res = await createSubdomain(subdomain, content, type, zone_id, token, domain, proxied);
+
+    if (res.status === true) {
+  const fullDomain = res.subdomain || `${subdomain}.${domain}`;
+  const createdOn = res.result?.created_on ? new Date(res.result.created_on).toLocaleString('id-ID') : 'Tanggal tidak tersedia';
+  const ipAddr = res.result?.content || content;
+
+  results.textContent = 
+    `✔️ Status: Berhasil\n` +
     `🌐 Domain: ${fullDomain}\n` +
     `📌 IP: ${ipAddr}\n` +
     `📅 Dibuat pada: ${createdOn}`;
